@@ -82,6 +82,8 @@ class KMCCalculator : public QMCalculator {
   std::string ratefile_;
   std::string occfile_;
 
+  int injection_id[];
+  
   Logger log_;
 
   double temperature_;

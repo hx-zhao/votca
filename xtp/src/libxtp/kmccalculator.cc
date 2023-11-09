@@ -41,7 +41,10 @@ void KMCCalculator::ParseCommonOptions(const tools::Property& options) {
   seed_ = options.get(".seed").as<Index>();
 
   numberofcarriers_ = options.get(".numberofcarriers").as<Index>();
-  injection_name_ = options.get(".injectionpattern").as<std::string>();
+// injection_name_ = options.get(".injectionpattern").as<std::string>();
+  
+  injection_id = options.get(".injection_segid").as<int>();
+
   maxrealtime_ = options.get(".maxrealtime").as<double>();
   trajectoryfile_ = options.get(".trajectoryfile").as<std::string>();
   temperature_ = options.get(".temperature").as<double>();
@@ -61,13 +64,28 @@ void KMCCalculator::LoadGraph(Topology& top) {
     throw std::runtime_error("Your state file contains no segments!");
   }
   nodes_.reserve(segs.size());
-  for (Segment& seg : segs) {
-    bool injectable = false;
-    if (tools::wildcmp(injection_name_, seg.getType())) {
-      injectable = true;
+  
+
+  // for (Segment& seg : segs) {
+  //   bool injectable = false;
+  //   if (tools::wildcmp(injection_name_, seg.getType())) {
+  //     injectable = true;
+  //   }
+  //   nodes_.push_back(GNode(seg, carriertype_, injectable));
+  // }
+  
+  for (Segment &seg : segs)
+    {
+      bool injectable = false;
+      for (int value : injection_id)
+      {
+        if (value == seg.getId)
+        {
+          bool injectable = ture;
+        }
+      }
+      nodes_.push_back(GNode(seg, carriertype_, injectable));        
     }
-    nodes_.push_back(GNode(seg, carriertype_, injectable));
-  }
 
   QMNBList& nblist = top.NBList();
   if (nblist.size() < 1) {
